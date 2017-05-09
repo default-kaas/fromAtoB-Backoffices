@@ -7,6 +7,8 @@ public class FromAtoB_backOffice {
 
     public static void main(String[] args) {
     
+        StartScreen s = new StartScreen();
+        
     }
     
 }

@@ -5,4 +5,12 @@ public class Locker {
     private int lockerStatus;
     private int lockerCode;
   //private ??? lockerLocation;
+		
+	}
+	
+	public String toString(){
+	}
+	
+	public int getLockerInformation(){
+	}
 }
