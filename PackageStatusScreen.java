@@ -7,14 +7,13 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;// Text area is een veld waar tekst in kan staan
-import javax.swing.JTextField;// Text is een klom waar alle tekst in kan staan. Als je de waards wilt gebruiken zoals int, double etc. moet je deze eerst converte.
+import javax.swing.JTextField;
 
 public class PackageStatusScreen extends JDialog implements ActionListener {
 
-    private JLabel mailAdresInvullen;
-    private JTextField mailAdresKlant;
-    private JButton statusBekijken, closeB;
+    private JLabel mailAdresInvullen = new JLabel("E mail adres");
+    private JTextField mailAdresKlant = new JTextField(30);
+    private JButton statusBekijken = new JButton("Check Status"), closeB = new JButton("Afsluiten");
     
 
     public PackageStatusScreen(JFrame frame) {
@@ -24,14 +23,11 @@ public class PackageStatusScreen extends JDialog implements ActionListener {
         setSize(500, 500);
         setLayout(new FlowLayout());
 
-        mailAdresInvullen = new JLabel("E mail adres");
+        
         add(mailAdresInvullen);
-        mailAdresKlant = new JTextField(30);
         add(mailAdresKlant);
-        statusBekijken = new JButton("Check Status");
         add(statusBekijken);
         
-        closeB = new JButton("Afsluiten");
         add(closeB);
 
         statusBekijken.addActionListener(this);
