@@ -1,4 +1,5 @@
-package fromatob_backoffice;
+package fromatobbackoffice;
+
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -9,23 +10,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class PackageStatusScreen extends JDialog implements ActionListener {
+public class LockerStatusScreen extends JDialog implements ActionListener {
 
-    private JLabel mailAdresInvullen = new JLabel("E mail adres");
-    private JTextField mailAdresKlant = new JTextField(30);
+    private JLabel stationnaam = new JLabel("StationNaam");
+    private JTextField station = new JTextField(10);
     private JButton statusBekijken = new JButton("Check Status"), closeB = new JButton("Afsluiten");
     
 
-    public PackageStatusScreen(JFrame frame) {
+    public LockerStatusScreen(JFrame frame) {
         super(frame,true);
         
-        setTitle("Pakket status");
+        setTitle("Kluis status");
         setSize(500, 500);
         setLayout(new FlowLayout());
 
         
-        add(mailAdresInvullen);
-        add(mailAdresKlant);
+        add(stationnaam);
+        add(station);
         add(statusBekijken);
         
         add(closeB);

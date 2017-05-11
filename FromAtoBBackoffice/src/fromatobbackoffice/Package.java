@@ -1,4 +1,4 @@
-package fromatob_backoffice;
+package fromatobbackoffice;
 
 import java.util.ArrayList;
 

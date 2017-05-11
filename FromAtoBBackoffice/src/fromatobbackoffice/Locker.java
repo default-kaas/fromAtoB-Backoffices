@@ -1,4 +1,4 @@
-package fromatob_backoffice;
+package fromatobbackoffice;
 
 public class Locker {
     private int lockerID;
