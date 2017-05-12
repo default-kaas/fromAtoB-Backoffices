@@ -14,7 +14,8 @@ public class DatabaseConnection {
     public DatabaseConnection(){
         
         try{
-            Class.forName("com.mysql.jdbc.driver");
+            System.out.println("Succes");
+            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);    
         }catch(Exception ex){
             System.out.println("Erro: "+ ex);
