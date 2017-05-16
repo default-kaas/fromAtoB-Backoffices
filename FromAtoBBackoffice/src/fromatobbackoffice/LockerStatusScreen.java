@@ -5,54 +5,18 @@
  */
 package fromatobbackoffice;
 
-import java.sql.*;
-
 /**
  *
- * @author Milan
+ * @author Dogen
  */
-public class MemberScreen extends javax.swing.JFrame {
+public class LockerStatusScreen extends javax.swing.JFrame {
 
-    Connection conn = null;
-    Statement stmt = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
-
-    public MemberScreen() {
+    /**
+     * Creates new form LockerStatusScreen
+     */
+    public LockerStatusScreen() {
         initComponents();
-        connect();
-        
-        
     }
-    
-        public void connect() {
-        // JDBC driver name and database URL
-        String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-        String DB_URL = "jdbc:mysql://localhost:3307/fromatob";
-
-        //  Database credentials
-        String USER = "root";
-        String PASS = "usbw";
-
-        try {
-            Class.forName(JDBC_DRIVER);
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-    }
-        
-        public void printMembers() throws SQLException {
-            String sql = "SELECT email, points, iban, firstname, lastname, phonenumber, city, zip_code, housenumber, created_at FROM users";
-            pstmt = conn.prepareStatement(sql);
-            
-        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,28 +27,27 @@ public class MemberScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        IndelingL = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        IndelingL.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        IndelingL.setText("Overzicht Members");
+        jLabel1.setText("welkom");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(298, 298, 298)
-                .addComponent(IndelingL)
-                .addContainerGap(302, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(187, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(178, 178, 178))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(IndelingL)
-                .addContainerGap(426, Short.MAX_VALUE))
+                .addGap(44, 44, 44)
+                .addComponent(jLabel1)
+                .addContainerGap(242, Short.MAX_VALUE))
         );
 
         pack();
@@ -107,25 +70,25 @@ public class MemberScreen extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MemberScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LockerStatusScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MemberScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LockerStatusScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MemberScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LockerStatusScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MemberScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LockerStatusScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MemberScreen().setVisible(true);
+                new LockerStatusScreen().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel IndelingL;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

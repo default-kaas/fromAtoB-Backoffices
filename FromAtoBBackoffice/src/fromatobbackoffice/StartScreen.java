@@ -22,10 +22,12 @@ public class StartScreen extends javax.swing.JFrame {
         PackageListButton = new javax.swing.JButton();
         LockerStatusButton = new javax.swing.JButton();
         CloseButton = new javax.swing.JButton();
+        Titel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(500, 600));
 
+        MemberListButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         MemberListButton.setText("Leden lijst");
         MemberListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -33,6 +35,7 @@ public class StartScreen extends javax.swing.JFrame {
             }
         });
 
+        PackageListButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         PackageListButton.setText("Pakket lijst van klant");
         PackageListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -40,6 +43,7 @@ public class StartScreen extends javax.swing.JFrame {
             }
         });
 
+        LockerStatusButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         LockerStatusButton.setText("Kluisjes Status lijst");
         LockerStatusButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -47,12 +51,16 @@ public class StartScreen extends javax.swing.JFrame {
             }
         });
 
+        CloseButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         CloseButton.setText("Afsluiten");
         CloseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CloseButtonActionPerformed(evt);
             }
         });
+
+        Titel.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        Titel.setText("A to B backoffice");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,16 +69,22 @@ public class StartScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(187, 187, 187)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(PackageListButton, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(PackageListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(MemberListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(LockerStatusButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(173, Short.MAX_VALUE))
+                .addContainerGap(210, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Titel)
+                .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
+                .addGap(66, 66, 66)
+                .addComponent(Titel)
+                .addGap(18, 18, 18)
                 .addComponent(MemberListButton)
                 .addGap(18, 18, 18)
                 .addComponent(PackageListButton)
@@ -78,14 +92,16 @@ public class StartScreen extends javax.swing.JFrame {
                 .addComponent(LockerStatusButton)
                 .addGap(55, 55, 55)
                 .addComponent(CloseButton)
-                .addContainerGap(251, Short.MAX_VALUE))
+                .addContainerGap(245, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void MemberListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MemberListButtonActionPerformed
-        // TODO add your handling code here:
+        MemberScreen ms = new MemberScreen();
+        ms.setVisible(true);
+        dispose();
     }//GEN-LAST:event_MemberListButtonActionPerformed
 
     private void PackageListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PackageListButtonActionPerformed
@@ -93,11 +109,13 @@ public class StartScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_PackageListButtonActionPerformed
 
     private void LockerStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LockerStatusButtonActionPerformed
-        // TODO add your handling code here:
+        LockerStatusScreen lss = new LockerStatusScreen();
+        lss.setVisible(true);
+        dispose();
     }//GEN-LAST:event_LockerStatusButtonActionPerformed
 
     private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_CloseButtonActionPerformed
 
     /**
@@ -140,5 +158,6 @@ public class StartScreen extends javax.swing.JFrame {
     private javax.swing.JButton LockerStatusButton;
     private javax.swing.JButton MemberListButton;
     private javax.swing.JButton PackageListButton;
+    private javax.swing.JLabel Titel;
     // End of variables declaration//GEN-END:variables
 }
