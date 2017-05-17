@@ -39,6 +39,7 @@ public class LockerStatusScreen extends javax.swing.JFrame {
         DatabaseConnection conn = new DatabaseConnection();
         stationSelect.setModel(new StationComboBoxModel(conn.getStationNames()));
         
+        
         stationSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stationSelectActionPerformed(evt);
@@ -110,6 +111,9 @@ public class LockerStatusScreen extends javax.swing.JFrame {
     }                                             
 
     private void statusCheckActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        String select = stationSelect.getSelectedItem().toString();
+        System.out.println(select);
+        getLocker(select);
         
     }                                           
 

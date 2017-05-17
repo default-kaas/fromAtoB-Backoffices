@@ -60,14 +60,17 @@ public class DatabaseConnection {
         } 
     }
     
-    public ArrayList getLocker(){
+    public ArrayList getLocker(String select){
     try{
         databaseConnection();
         
     //    int stationID = stationSelect.getInt().trim();
         
-        String sql = "SELECT * FROM lockers";
+        String sql = "SELECT * FROM lockers WHERE station_id IN (SELECT id FROM statioons WHERE long_name = ? ";
+        // select * from lockers where station_id IN (select id from stations where long_name = 'Alkmaar');
+        
         prepareStatement = connection.prepareStatement(sql);
+        prepareStatement.setString(1, select);
         ResultSet resultSet = prepareStatement.executeQuery();
         
         ArrayList<Locker> lockers = new ArrayList<>();
