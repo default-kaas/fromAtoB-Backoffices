@@ -106,15 +106,17 @@ public class LockerStatusScreen extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void stationSelectActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+        
     }                                             
 
     private void statusCheckActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+        
     }                                           
 
     private void backToStartScreenActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        // TODO add your handling code here:
+        StartScreen ss = new StartScreen();
+        ss.setVisible(true);
+        dispose();
     }                                                 
 
     /**

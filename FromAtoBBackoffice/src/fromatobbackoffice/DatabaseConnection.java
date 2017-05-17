@@ -10,6 +10,7 @@ public class DatabaseConnection {
     private ResultSet resultSet;
     private PreparedStatement prepareStatement;
     private Station station;
+    private Locker locker;
     
     private static final String USERNAME = "wnk012";
     private static final String PASSWORD = "wnk012";
@@ -59,21 +60,45 @@ public class DatabaseConnection {
         } 
     }
     
-    public void getLockerAndStation(){
+    public ArrayList getLocker(){
     try{
         databaseConnection();
         
     //    int stationID = stationSelect.getInt().trim();
         
-        String sql = "SELECT Station_ID, Name_station FROM stations";
+        String sql = "SELECT * FROM lockers";
         prepareStatement = connection.prepareStatement(sql);
         ResultSet resultSet = prepareStatement.executeQuery();
+        
+        ArrayList<Locker> lockers = new ArrayList<>();
+        
+        while (resultSet.next()) {
+            Locker l = new Locker();
+            
+            int lId = resultSet.getInt("id");
+            l.setId(lId);
+            int sID = resultSet.getInt("station_id");
+            l.setStationID(sID);
+            int lN = resultSet.getInt("locker_number");
+            l.setLocker_number(lN);
+            int lC = resultSet.getInt("locker_code");
+            l.setLocker_code(lC);
+            int o = resultSet.getInt("occupied");
+            l.setOccupied(o);
+            
+            lockers.add(l);
+        }
+        
+        return lockers;
+        
     } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
+            return null;
         } catch (Exception ex) {
             //Handle errors for Class.forName
             ex.printStackTrace();
+            return null;
         } 
     } 
     
