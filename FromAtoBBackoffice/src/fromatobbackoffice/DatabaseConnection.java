@@ -9,6 +9,7 @@ public class DatabaseConnection {
     private Statement statement;
     private ResultSet resultSet;
     private PreparedStatement prepareStatement;
+    private Station station;
     
     private static final String USERNAME = "wnk012";
     private static final String PASSWORD = "wnk012";
@@ -29,15 +30,24 @@ public class DatabaseConnection {
         }  
     }
     
-    public ArrayList getStation(){
+    public ArrayList getStationNames(){
     try{
         databaseConnection();
-        String sql = "SELECT  Name_station FROM Station";
+        
+        String sql = "SELECT Name_station FROM Station";
         prepareStatement = connection.prepareStatement(sql);
         resultSet = prepareStatement.executeQuery();
         
-        ArrayList<String> list = new ArrayList<String>();
-        return null;
+        ArrayList<Station> stationNames = new ArrayList<>();
+        
+        while (resultSet.next()) {
+            Station s = new Station();
+            String sN = resultSet.getString("Name_station");
+            s.setStationName(sN);
+            stationNames.add(s);
+        }
+        
+        return stationNames;
     } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
