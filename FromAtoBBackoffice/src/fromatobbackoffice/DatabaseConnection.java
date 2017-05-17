@@ -34,7 +34,7 @@ public class DatabaseConnection {
     try{
         databaseConnection();
         
-        String sql = "SELECT Name_station FROM Station";
+        String sql = "SELECT long_name FROM stations";
         prepareStatement = connection.prepareStatement(sql);
         resultSet = prepareStatement.executeQuery();
         
@@ -42,7 +42,7 @@ public class DatabaseConnection {
         
         while (resultSet.next()) {
             Station s = new Station();
-            String sN = resultSet.getString("Name_station");
+            String sN = resultSet.getString("long_name");
             s.setStationName(sN);
             stationNames.add(s);
         }

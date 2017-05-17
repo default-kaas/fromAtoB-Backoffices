@@ -35,7 +35,10 @@ public class LockerStatusScreen extends javax.swing.JFrame {
         titel.setPreferredSize(new Dimension(500, 500));
 
         stationSelect.setFont(new Font("Tahoma", 1, 11)); // NOI18N
-        stationSelect.setModel(new DefaultComboBoxModel<>(.getStationName));
+        
+        DatabaseConnection conn = new DatabaseConnection();
+        stationSelect.setModel(new StationComboBoxModel(conn.getStationNames()));
+        
         stationSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stationSelectActionPerformed(evt);
