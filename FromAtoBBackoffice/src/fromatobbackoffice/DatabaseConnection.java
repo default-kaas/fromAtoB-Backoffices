@@ -65,7 +65,7 @@ public class DatabaseConnection {
         
     //    int stationID = stationSelect.getInt().trim();
         
-        String sql = "SELECT Station_ID, Name_station FROM Station";
+        String sql = "SELECT Station_ID, Name_station FROM stations";
         prepareStatement = connection.prepareStatement(sql);
         ResultSet resultSet = prepareStatement.executeQuery();
     } catch (SQLException se) {
