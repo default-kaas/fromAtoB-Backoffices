@@ -1,5 +1,7 @@
 package fromatobbackoffice;
+import java.awt.List;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DatabaseConnection {
     
@@ -12,38 +14,57 @@ public class DatabaseConnection {
     private static final String PASSWORD = "wnk012";
     private static final String CONN_STRING = "jdbc:mysql://jestii.nl:3306/wnk012";
     
-    public DatabaseConnection(){
-        
-        try{
-            System.out.println("Succes");
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);    
-        }catch(Exception ex){
-            System.out.println("Erro: "+ ex);
-        }
-        
-    }
-    
     public void databaseConnection(){
         
         try{
             System.out.println("Succes");
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);    
-        }catch(Exception ex){
-            System.out.println("Erro: "+ ex);
-        }
-        
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }  
     }
     
+    public ArrayList getStation(){
+    try{
+        databaseConnection();
+        String sql = "SELECT  Name_station FROM Station";
+        prepareStatement = connection.prepareStatement(sql);
+        resultSet = prepareStatement.executeQuery();
+        
+        ArrayList<String> list = new ArrayList<String>();
+        return null;
+    } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+            return null;
+        } catch (Exception ex) {
+            //Handle errors for Class.forName
+            ex.printStackTrace();
+            return null;
+        } 
+    }
     
     public void getLockerAndStation(){
-    
-    
-    String sql = "SELECT * FROM administrator WHERE username = ?";
-    prepareStatement = connection.prepareStatement(sql);
-    prepareStatement.setString(1, user);
-    ResultSet resultSet = prepareStatement.executeQuery();
-    }
+    try{
+        databaseConnection();
+        
+    //    int stationID = stationSelect.getInt().trim();
+        
+        String sql = "SELECT Station_ID, Name_station FROM Station";
+        prepareStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = prepareStatement.executeQuery();
+    } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception ex) {
+            //Handle errors for Class.forName
+            ex.printStackTrace();
+        } 
+    } 
     
 }
