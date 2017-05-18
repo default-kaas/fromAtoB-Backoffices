@@ -8,7 +8,7 @@ public class DatabaseConnection {
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
-    private PreparedStatement prepareStatement;
+    private PreparedStatement pstmt;
     private Station station;
     private Locker locker;
     
@@ -36,8 +36,8 @@ public class DatabaseConnection {
         databaseConnection();
         
         String sql = "SELECT long_name FROM stations";
-        prepareStatement = connection.prepareStatement(sql);
-        resultSet = prepareStatement.executeQuery();
+        pstmt = connection.prepareStatement(sql);
+        resultSet = pstmt.executeQuery();
         
         ArrayList<Station> stationNames = new ArrayList<>();
         
@@ -59,50 +59,5 @@ public class DatabaseConnection {
             return null;
         } 
     }
-    
-    public ArrayList getLocker(String select){
-    try{
-        databaseConnection();
-        
-    //    int stationID = stationSelect.getInt().trim();
-        
-        String sql = "SELECT * FROM lockers WHERE station_id IN (SELECT id FROM statioons WHERE long_name = ? ";
-        // select * from lockers where station_id IN (select id from stations where long_name = 'Alkmaar');
-        
-        prepareStatement = connection.prepareStatement(sql);
-        prepareStatement.setString(1, select);
-        ResultSet resultSet = prepareStatement.executeQuery();
-        
-        ArrayList<Locker> lockers = new ArrayList<>();
-        
-        while (resultSet.next()) {
-            Locker l = new Locker();
-            
-            int lId = resultSet.getInt("id");
-            l.setId(lId);
-            int sID = resultSet.getInt("station_id");
-            l.setStationID(sID);
-            int lN = resultSet.getInt("locker_number");
-            l.setLocker_number(lN);
-            int lC = resultSet.getInt("locker_code");
-            l.setLocker_code(lC);
-            int o = resultSet.getInt("occupied");
-            l.setOccupied(o);
-            
-            lockers.add(l);
-        }
-        
-        return lockers;
-        
-    } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-            return null;
-        } catch (Exception ex) {
-            //Handle errors for Class.forName
-            ex.printStackTrace();
-            return null;
-        } 
-    } 
-    
+       
 }
