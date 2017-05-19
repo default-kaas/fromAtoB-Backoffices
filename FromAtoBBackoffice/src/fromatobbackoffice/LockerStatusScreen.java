@@ -186,7 +186,7 @@ public class LockerStatusScreen extends javax.swing.JFrame {
             String select = stationSelect.getSelectedItem().toString();
             System.out.println(select);
             
-            String sql = "SELECT l.id, station_id, locker_number, locker_code, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE long_name = ?";
+            String sql = "SELECT l.id, s.station_id, locker_number, locker_code, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE long_name = ?";
             System.out.println(1+ sql);
             pstmt  = connection.prepareStatement(sql);
             
