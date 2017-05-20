@@ -96,7 +96,7 @@ public class LockerStatusScreen extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Station_ID", "Locker_number", "Locker_code", "occupied"
+                "id", "name", "locker_number", "locker_code", "occupied"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -114,7 +114,7 @@ public class LockerStatusScreen extends javax.swing.JFrame {
         stationLabel.setText("Station selecteren :");
 
         statusCheck.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        statusCheck.setText("Status check");
+        statusCheck.setText("Kluis status of code veranderen ");
         statusCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statusCheckActionPerformed(evt);
@@ -166,7 +166,7 @@ public class LockerStatusScreen extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void stationSelectActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        
+        fetch();
     }                                             
     
     private void backToStartScreenActionPerformed(java.awt.event.ActionEvent evt) {                                                  
@@ -177,23 +177,18 @@ public class LockerStatusScreen extends javax.swing.JFrame {
 
     private void statusCheckActionPerformed(java.awt.event.ActionEvent evt) {                                            
         
-        fetch();
+        
     }     
     
-    public void fetch() {
+    private void fetch() {
         try {
             databaseConnection();
             String select = stationSelect.getSelectedItem().toString();
-            System.out.println(select);
-            
-            String sql = "SELECT l.id, s.station_id, locker_number, locker_code, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE long_name = ?";
-            System.out.println(1+ sql);
+
+            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE name = ?"; 
             pstmt  = connection.prepareStatement(sql);
-            
-            pstmt.setString(1, "Amersfoort");
-            System.out.println(2 + sql);
-            resultSet = pstmt.executeQuery(sql);
-            System.out.println(3 + sql);
+            pstmt.setString(1, select);
+            resultSet = pstmt.executeQuery();
             Table.setModel(DbUtils.resultSetToTableModel(resultSet));
        
         } catch (Exception e) {
@@ -203,7 +198,7 @@ public class LockerStatusScreen extends javax.swing.JFrame {
     }
 
     
-    /*public static void main(String args[]) {
+    public static void main(String args[]) {
         
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -227,7 +222,7 @@ public class LockerStatusScreen extends javax.swing.JFrame {
                 new LockerStatusScreen().setVisible(true);
             }
         });
-    }*/
+    }
 
                         
     
