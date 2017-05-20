@@ -45,7 +45,7 @@ public class StartScreen extends javax.swing.JFrame {
         });
 
         LockerStatusButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        LockerStatusButton.setText("Kluisjes Status lijst");
+        LockerStatusButton.setText("Station kluis status");
         LockerStatusButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LockerStatusButtonActionPerformed(evt);
@@ -111,8 +111,8 @@ public class StartScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_PackageListButtonActionPerformed
 
     private void LockerStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LockerStatusButtonActionPerformed
-        LockerStatusScreen lss = new LockerStatusScreen();
-        lss.setVisible(true);
+        StationLockerStatusScreen slss = new StationLockerStatusScreen();
+        slss.setVisible(true);
         dispose();
     }//GEN-LAST:event_LockerStatusButtonActionPerformed
 
