@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
 
-public class StationComboBoxModel implements ComboBoxModel<Station> {
-    private ArrayList<Station> list;
+public class LockerComboBoxModel implements ComboBoxModel<Locker> {
+    private ArrayList<Locker> list;
     private Object selectedItem;
     
-    public StationComboBoxModel(ArrayList<Station> list) {
+    public LockerComboBoxModel(ArrayList<Locker> list) {
         this.list = list;
     }
     
@@ -28,7 +28,7 @@ public class StationComboBoxModel implements ComboBoxModel<Station> {
     }
 
     @Override
-    public Station getElementAt(int index) {
+    public Locker getElementAt(int index) {
         return list.get(index);
     }
 

@@ -7,7 +7,9 @@ public class Locker {
     private int locker_code;
     private int occupied;
 
-    
+    public String toString(){
+        return id + "";
+    }
     
     public int getId() {
         return id;
