@@ -111,8 +111,8 @@ public class StartScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_PackageListButtonActionPerformed
 
     private void LockerStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LockerStatusButtonActionPerformed
-        StationLockerStatusScreen slss = new StationLockerStatusScreen();
-        slss.setVisible(true);
+        StationLockerStatusChangeScreen slscs = new StationLockerStatusChangeScreen();
+        slscs.setVisible(true);
         dispose();
     }//GEN-LAST:event_LockerStatusButtonActionPerformed
 
