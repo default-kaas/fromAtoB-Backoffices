@@ -19,7 +19,7 @@ public class MemberScreen extends javax.swing.JFrame {
     Statement stmt = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    boolean hoogNaarLaag = true;
+    boolean hoogNaarLaag = true; //voor filteren
 
     public MemberScreen() {
         initComponents();
@@ -28,6 +28,7 @@ public class MemberScreen extends javax.swing.JFrame {
 
     }
 
+    //method for databaseconnection
     public void connect() {
         // JDBC driver name and database URL
         String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -51,90 +52,150 @@ public class MemberScreen extends javax.swing.JFrame {
         }
     }
 
+    //fetch data of all members out of database
     public void fetch() {
         try {
             stmt = conn.createStatement();
-            String sql = "SELECT u.id, email, COUNT(owner_id), points, iban, firstname, lastname, phonenumber, city, zip_code, housenumber, u.created_at FROM users u JOIN packages p ON u.id = owner_id GROUP BY u.id";
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users";
             rs = stmt.executeQuery(sql);
-
+            //create table
             jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-       
         } catch (Exception e) {
             System.out.println(e);
             JOptionPane.showMessageDialog(null, e);
         }
     }
 
+    //fetch memberdata on ID
     public void fetchID() {
-        try {
+        if ("".equals(jTFID.getText())) {
+            JOptionPane.showMessageDialog(null, "Vul id in");
+        } else {
             try {
-                int id = Integer.parseInt(jTFID.getText());
-                String sql = "SELECT id, email, points, iban, firstname, lastname, phonenumber, city, zip_code, housenumber, created_at FROM users WHERE id = ?";
-                pstmt = conn.prepareStatement(sql);
-                pstmt.setInt(1, id);
-                rs = pstmt.executeQuery();
-                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+                try {
+                    int id = Integer.parseInt(jTFID.getText());
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE userID = ?";
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setInt(1, id);
+                    rs = pstmt.executeQuery();
+                    //create table
+                    jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+                    jTFID.setText("");
 
-            } catch (NumberFormatException nfe) {
-                int id = 0;
-                JOptionPane.showMessageDialog(null, "Vul een getal in");
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(null, "Vul een getal in");
+                }
+
+            } catch (Exception e) {
+                System.out.println(e);
             }
-
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 
+    //fetch memberdata on email
     public void fetchEmail() {
-        try {
-            String email = jTFEmail.getText();
+        if ("".equals(jTFEmail.getText())) {
+            JOptionPane.showMessageDialog(null, "Vul e-mail in");
+        } else {
+            try {
+                String email = jTFEmail.getText();
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE e-mail = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, email);
+                rs = pstmt.executeQuery();
+                //create table
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+                jTFEmail.setText("");
 
-            String sql = "SELECT id, email, points, iban, firstname, lastname, phonenumber, city, zip_code, housenumber, created_at FROM users WHERE email = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, email);
-            rs = pstmt.executeQuery();
-
-            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-
-        } catch (Exception e) {
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
 
+    //fetch memberdata on city
     public void fetchStad() {
-        try {
-            String stad = jTFStad.getText();
+        if ("".equals(jTFStad.getText())) {
+            JOptionPane.showMessageDialog(null, "Vul woonplaats in");
+        } else {
+            try {
+                String stad = jTFStad.getText();
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE city = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, stad);
+                rs = pstmt.executeQuery();
+                //create table
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+                jTFStad.setText("");
 
-            String sql = "SELECT id, email, points, iban, firstname, lastname, phonenumber, city, zip_code, housenumber, created_at FROM users WHERE city = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, stad);
-            rs = pstmt.executeQuery();
-
-            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-
-        } catch (Exception e) {
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
 
-    public void filterPoints() {
+    //fetch memberdata on firstname
+    public void fetchFirstname() {
+        if ("".equals(jTFvoornaam.getText())) {
+            JOptionPane.showMessageDialog(null, "Vul voornaam in");
+        } else {
+            try {
+                String voornaam = "%" + jTFvoornaam.getText() + "%";
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE first_name LIKE ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, voornaam);
+                rs = pstmt.executeQuery();
+                //create table
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+                jTFvoornaam.setText("");
 
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    }
+
+    //fetch memberdata on lastname
+    public void fetchLastname() {
+        if ("".equals(jTFachternaam.getText())) {
+            JOptionPane.showMessageDialog(null, "Vul achternaam in");
+        } else {
+            try {
+                String achternaam = "%" + jTFachternaam.getText() + "%";
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE last_name LIKE ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, achternaam);
+                rs = pstmt.executeQuery();
+                //create table
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+                jTFachternaam.setText("");
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    }
+
+    //order members by points
+    public void orderByPoints() {
         if (hoogNaarLaag) {
             try {
-                String sql = "SELECT id, email, points, iban, firstname, lastname, phonenumber, city, zip_code, housenumber, created_at FROM users ORDER BY points DESC";
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users ORDER BY points DESC";
                 pstmt = conn.prepareStatement(sql);
                 rs = pstmt.executeQuery();
                 hoogNaarLaag = false;
+                //create table ordered by points from most to least
                 jTable1.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
                 System.out.println(e);
             }
         } else {
             try {
-                String sql = "SELECT id, email, points, iban, firstname, lastname, phonenumber, city, zip_code, housenumber, created_at FROM users ORDER BY points ASC";
+                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users ORDER BY points ASC";
                 pstmt = conn.prepareStatement(sql);
                 rs = pstmt.executeQuery();
                 hoogNaarLaag = true;
+                //create table ordered by points from least to most
                 jTable1.setModel(DbUtils.resultSetToTableModel(rs));
             } catch (Exception e) {
                 System.out.println(e);
@@ -142,30 +203,63 @@ public class MemberScreen extends javax.swing.JFrame {
         }
 
     }
-    
-    public void filterSentPackages() {
-                try {
-            stmt = conn.createStatement();
-            String sql = "SELECT DISTINCT u.id, email, firstname, lastname, COUNT(*) 'Verstuurde pakketten', points FROM users u JOIN packages p ON u.id = owner_id GROUP BY u.id ORDER BY COUNT(*) DESC";
-            rs = stmt.executeQuery(sql);
 
-            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, e);
+    // order members by amount of sent packages
+    public void orderBySentPackages() {
+        if (hoogNaarLaag) {
+            try {
+                stmt = conn.createStatement();
+                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Verstuurde pakketten', points FROM users JOIN packages ON userID = customerID GROUP BY userID ORDER BY COUNT(*) DESC";
+                rs = stmt.executeQuery(sql);
+                hoogNaarLaag = false;
+                //create table ordered by sent packages from most to least
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, e);
+            }
+        } else {
+            try {
+                stmt = conn.createStatement();
+                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Verstuurde pakketten', points FROM users JOIN packages ON userID = customerID GROUP BY userID ORDER BY COUNT(*)";
+                rs = stmt.executeQuery(sql);
+                hoogNaarLaag = true;
+                //create table ordered by sent packages from least to most
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, e);
+            }
         }
     }
 
-        public void filterDeliveredPackages() {
-                try {
-            stmt = conn.createStatement();
-            String sql = "SELECT DISTINCT u.id, email, firstname, lastname, COUNT(*) 'Bezorgde pakketten', points FROM users u JOIN packages p ON u.id = deliver_id GROUP BY u.id ORDER BY COUNT(*) DESC";
-            rs = stmt.executeQuery(sql);
+    //order members by amount of delivered packages
+    public void orderByDeliveredPackages() {
+        if (hoogNaarLaag) {
+            try {
+                stmt = conn.createStatement();
+                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Bezorgde pakketten', points FROM users JOIN partial routes ON userID = courierID GROUP BY userID ORDER BY COUNT(*) DESC";
+                rs = stmt.executeQuery(sql);
+                hoogNaarLaag = false;
+                //create table ordered by delivered packages from most to least
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, e);
+            }
 
-            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, e);
+        } else {
+            try {
+                stmt = conn.createStatement();
+                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Bezorgde pakketten', points FROM users JOIN partial routes ON userID = courierID GROUP BY userID ORDER BY COUNT(*)";
+                rs = stmt.executeQuery(sql);
+                hoogNaarLaag = true;
+                //create table ordered by delivered packages from least to most
+                jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, e);
+            }
         }
     }
 
@@ -191,19 +285,39 @@ public class MemberScreen extends javax.swing.JFrame {
         jTFStad = new javax.swing.JTextField();
         jBStad = new javax.swing.JButton();
         JButtonAllMembers = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jBorderPoints = new javax.swing.JButton();
+        jBorderSent = new javax.swing.JButton();
+        jBorderDelivered = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        jBstartscreen = new javax.swing.JButton();
+        jLvoornaam = new javax.swing.JLabel();
+        jLachternaam = new javax.swing.JLabel();
+        jTFvoornaam = new javax.swing.JTextField();
+        jTFachternaam = new javax.swing.JTextField();
+        jBvoornaam = new javax.swing.JButton();
+        jBachternaam = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Memberoverzicht");
-        setPreferredSize(new java.awt.Dimension(1366, 778));
+        setPreferredSize(new java.awt.Dimension(2000, 2000));
+        setSize(new java.awt.Dimension(2000, 2000));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -235,7 +349,6 @@ public class MemberScreen extends javax.swing.JFrame {
         jLID.setText("ID");
 
         jTFID.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTFID.setText("<ID>");
 
         jBID.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBID.setText("Zoeken");
@@ -249,7 +362,6 @@ public class MemberScreen extends javax.swing.JFrame {
         jLEmail.setText("E-mail");
 
         jTFEmail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTFEmail.setText("<e-mail>");
 
         jBEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBEmail.setText("Zoeken");
@@ -260,10 +372,9 @@ public class MemberScreen extends javax.swing.JFrame {
         });
 
         jLStad.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLStad.setText("Stad");
+        jLStad.setText("Woonplaats");
 
         jTFStad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTFStad.setText("<stad>");
 
         jBStad.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBStad.setText("Zoeken");
@@ -281,138 +392,218 @@ public class MemberScreen extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton1.setText("Aantal punten");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jBorderPoints.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBorderPoints.setText("Aantal punten");
+        jBorderPoints.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jBorderPointsActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2.setText("Verstuurde paketten");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jBorderSent.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBorderSent.setText("Verstuurde paketten");
+        jBorderSent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jBorderSentActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setText("Bezorgde pakketen");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jBorderDelivered.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBorderDelivered.setText("Bezorgde pakketen");
+        jBorderDelivered.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jBorderDeliveredActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Filter op:");
+        jLabel1.setText("Sorteer op:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Zoeken op:");
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton4.setText("Terug naar Startscherm");
+        jBstartscreen.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBstartscreen.setText("Terug naar Startscherm");
+        jBstartscreen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBstartscreenActionPerformed(evt);
+            }
+        });
+
+        jLvoornaam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLvoornaam.setText("Voornaam");
+
+        jLachternaam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLachternaam.setText("Achternaam");
+
+        jTFvoornaam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jTFachternaam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jBvoornaam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBvoornaam.setText("Zoeken");
+        jBvoornaam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBvoornaamActionPerformed(evt);
+            }
+        });
+
+        jBachternaam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBachternaam.setText("Zoeken");
+        jBachternaam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBachternaamActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JButtonAllMembers)
-                    .addComponent(jButton4))
-                .addGap(24, 24, 24)
+                    .addComponent(jBstartscreen)
+                    .addComponent(JButtonAllMembers))
+                .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jBID, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLID)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTFID)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLEmail)
+                                    .addComponent(jBEmail)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jBvoornaam)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLvoornaam)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTFvoornaam, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(44, 44, 44)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLachternaam)
+                                    .addComponent(jBachternaam))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLID)
+                                .addComponent(jTFEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLStad)
+                                    .addComponent(jBStad))
                                 .addGap(18, 18, 18)
-                                .addComponent(jTFID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jBID))
-                        .addGap(52, 52, 52)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTFStad, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLEmail)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTFEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jBEmail))
-                        .addGap(50, 50, 50)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLStad)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTFStad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jBStad)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTFachternaam, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBorderSent)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addGap(48, 48, 48))
+                    .addComponent(jBorderPoints)
+                    .addComponent(jBorderDelivered))
+                .addGap(49, 49, 49))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLID)
-                    .addComponent(jLEmail)
-                    .addComponent(jTFEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLStad)
-                    .addComponent(jTFStad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JButtonAllMembers))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jBID)
-                        .addComponent(jBEmail)
-                        .addComponent(jButton4))
-                    .addComponent(jBStad))
-                .addGap(30, 30, 30))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(JButtonAllMembers)
+                        .addGap(104, 104, 104))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLID)
+                                    .addComponent(jTFID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLEmail)
+                                    .addComponent(jTFEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLStad)
+                                    .addComponent(jTFStad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jBorderPoints))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jBEmail)
+                                        .addComponent(jBID))
+                                    .addComponent(jBorderSent)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addComponent(jBStad)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jBstartscreen)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 7, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLvoornaam)
+                                            .addComponent(jTFvoornaam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLachternaam)
+                                            .addComponent(jTFachternaam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jBachternaam)
+                                    .addComponent(jBvoornaam))
+                                .addGap(11, 11, 11))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jBorderDelivered)
+                                .addContainerGap())))))
         );
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel3.setText("Member Overzicht");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1730, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(491, 491, 491)
+                                .addComponent(jLabel3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(142, 142, 142)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(85, 85, 85)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(699, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel3)
                 .addGap(31, 31, 31)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(204, 204, 204))
+                .addGap(69, 69, 69)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(362, Short.MAX_VALUE))
         );
 
-        setBounds(0, 0, 1766, 538);
+        setBounds(0, 0, 1766, 1039);
     }// </editor-fold>                        
 
     private void JButtonAllMembersActionPerformed(java.awt.event.ActionEvent evt) {                                                  
@@ -431,21 +622,36 @@ public class MemberScreen extends javax.swing.JFrame {
         fetchStad();
     }                                      
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        filterPoints();
-    }                                        
+    private void jBorderPointsActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        orderByPoints();
+    }                                             
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {                                     
-        // TODO add your handling code here:
+
     }                                    
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        filterSentPackages();
-    }                                        
+    private void jBorderSentActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        orderBySentPackages();
+    }                                           
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        filterDeliveredPackages();
-    }                                        
+    private void jBorderDeliveredActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+        orderByDeliveredPackages();
+    }                                                
+
+    private void jBstartscreenActionPerformed(java.awt.event.ActionEvent evt) {                                              
+
+        StartScreen s = new StartScreen();
+        s.setVisible(true);
+        dispose();
+    }                                             
+
+    private void jBvoornaamActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        fetchFirstname();
+    }                                          
+
+    private void jBachternaamActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        fetchLastname();
+    }                                            
 
     /**
      * @param args the command line arguments
@@ -487,20 +693,27 @@ public class MemberScreen extends javax.swing.JFrame {
     private javax.swing.JButton jBEmail;
     private javax.swing.JButton jBID;
     private javax.swing.JButton jBStad;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jBachternaam;
+    private javax.swing.JButton jBorderDelivered;
+    private javax.swing.JButton jBorderPoints;
+    private javax.swing.JButton jBorderSent;
+    private javax.swing.JButton jBstartscreen;
+    private javax.swing.JButton jBvoornaam;
     private javax.swing.JLabel jLEmail;
     private javax.swing.JLabel jLID;
     private javax.swing.JLabel jLStad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLachternaam;
+    private javax.swing.JLabel jLvoornaam;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTFEmail;
     private javax.swing.JTextField jTFID;
     private javax.swing.JTextField jTFStad;
+    private javax.swing.JTextField jTFachternaam;
+    private javax.swing.JTextField jTFvoornaam;
     private javax.swing.JTable jTable1;
     // End of variables declaration                   
 }
