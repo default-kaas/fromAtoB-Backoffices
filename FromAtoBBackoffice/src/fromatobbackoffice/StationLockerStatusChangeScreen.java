@@ -12,19 +12,19 @@ import net.proteanit.sql.DbUtils;
 
 public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
 
-    private javax.swing.JTextField code;
-    private javax.swing.JLabel codeLabel;
-    private javax.swing.JButton codeRestButton;
-    private javax.swing.JLabel idLabel;
-    private javax.swing.JComboBox<Locker> idSelect;
-    private javax.swing.JButton backToStartScreenAction;
-    private javax.swing.JScrollPane scroll;
-    private javax.swing.JLabel stationLabel;
-    private javax.swing.JComboBox<Station> stationSelect;
-    private javax.swing.JLabel statusLabel;
-    private javax.swing.JComboBox<String> statusSelect;
-    private javax.swing.JTable table;
-    private javax.swing.JLabel titel;
+    private JTextField code;
+    private JLabel codeLabel;
+    private JButton codeRestButton;
+    private JLabel idLabel;
+    private JComboBox<Locker> idSelect;
+    private JButton backToStartScreenAction;
+    private JScrollPane scroll;
+    private JLabel stationLabel;
+    private JComboBox<Station> stationSelect;
+    private JLabel statusLabel;
+    private JComboBox<String> statusSelect;
+    private JTable table;
+    private JLabel titel;
     
     private Connection connection;
     private Statement statement;
@@ -55,32 +55,31 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     }
 
     
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    @SuppressWarnings("unchecked")                         
     private void initComponents() {
 
-        titel = new javax.swing.JLabel();
-        stationLabel = new javax.swing.JLabel();
-        stationSelect = new javax.swing.JComboBox<>();
-        idLabel = new javax.swing.JLabel();
-        idSelect = new javax.swing.JComboBox<>();
-        codeLabel = new javax.swing.JLabel();
-        code = new javax.swing.JTextField();
-        codeRestButton = new javax.swing.JButton();
-        statusLabel = new javax.swing.JLabel();
-        statusSelect = new javax.swing.JComboBox<>();
-        backToStartScreenAction = new javax.swing.JButton();
-        scroll = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        titel = new JLabel();
+        stationLabel = new JLabel();
+        stationSelect = new JComboBox<>();
+        idLabel = new JLabel();
+        idSelect = new JComboBox<>();
+        codeLabel = new JLabel();
+        code = new JTextField();
+        codeRestButton = new JButton();
+        statusLabel = new JLabel();
+        statusSelect = new JComboBox<>();
+        backToStartScreenAction = new JButton();
+        scroll = new JScrollPane();
+        table = new JTable();
         DatabaseConnection conn = new DatabaseConnection();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        titel.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        titel.setFont(new java.awt.Font("Tahoma", 1, 48)); 
         titel.setText("Station kluis status aanpas scherm");
 
-        stationLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        stationLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
         stationLabel.setText("Station selecteren:");
 
         stationSelect.setEditable(true);
@@ -92,7 +91,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        idLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        idLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
         idLabel.setText("Kluis ID selecteren:");
 
         idSelect.setEditable(true);
@@ -103,17 +102,17 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        codeLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        codeLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
         codeLabel.setText("Kluis code instellen:");
 
-        code.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        code.setFont(new java.awt.Font("Tahoma", 0, 12)); 
         code.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 codeActionPerformed(evt);
             }
         });
 
-        codeRestButton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        codeRestButton.setFont(new java.awt.Font("Tahoma", 1, 12)); 
         codeRestButton.setText("Rest kluis code");
         codeRestButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,7 +120,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        statusLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        statusLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
         statusLabel.setText("Kluis status instellen:");
 
         statusSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "true", "false" }));
@@ -131,7 +130,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        backToStartScreenAction.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        backToStartScreenAction.setFont(new java.awt.Font("Tahoma", 1, 12)); 
         backToStartScreenAction.setText("Terug naar startscherm");
         backToStartScreenAction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -357,11 +356,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     }
     
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -380,7 +375,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new StationLockerStatusChangeScreen().setVisible(true);
