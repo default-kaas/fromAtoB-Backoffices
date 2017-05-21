@@ -26,6 +26,31 @@ public class LockerStatusScreen extends javax.swing.JFrame {
     private JTable table;
     private JLabel titel;
     
+    private Connection connection;
+    private Statement statement;
+    private ResultSet resultSet;
+    private PreparedStatement pstmt;
+    private Station station;
+    private Locker locker;
+    
+    private static final String USERNAME = "wnk012";
+    private static final String PASSWORD = "wnk012";
+    private static final String CONN_STRING = "jdbc:mysql://jestii.nl:3306/wnk012";
+    
+    public void databaseConnection(){
+        
+        try{
+            System.out.println("Succes");
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);    
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }  
+    }
     
     public LockerStatusScreen() {
         initComponents();
@@ -206,15 +231,15 @@ public class LockerStatusScreen extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void statusSelectActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        
+        fetchLockersOnIDAndChangeOccupied();
     }                                            
 
     private void codeButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        
+        fetchLockersOnIDAndRestLockerCode();
     }                                          
 
     private void idSelectActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        
+        fetchLockersOnID();
     }                                        
 
     private void backToStationLockerScreenActionPerformed(java.awt.event.ActionEvent evt) {                                                          
@@ -230,9 +255,104 @@ public class LockerStatusScreen extends javax.swing.JFrame {
     }                                                 
 
     private void codeActionPerformed(java.awt.event.ActionEvent evt) {                                     
-        
-    }                                    
+        fetchLockersOnIDAndChangeLockerCode();
+    }           
 
+    private void fetchLockersOnID() {
+        try {
+        databaseConnection();
+            String select = idSelect.getSelectedItem().toString();
+
+            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+            pstmt  = connection.prepareStatement(sql);
+            pstmt.setString(1, select);
+            resultSet = pstmt.executeQuery();
+            table.setModel(DbUtils.resultSetToTableModel(resultSet));
+       
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void fetchLockersOnIDAndChangeOccupied() {
+        try {
+            String select = idSelect.getSelectedItem().toString();
+            
+            databaseConnection();
+            String selectStatus = statusSelect.getSelectedItem().toString();
+                
+            if(selectStatus == "false"){
+                String sqlf = "UPDATE lockers SET occupied = 0  WHERE id = ?";
+                pstmt  = connection.prepareStatement(sqlf);
+                pstmt.setString(1, select);
+                pstmt.executeUpdate();
+            }else{
+                String sqlf = "UPDATE lockers SET occupied = 1  WHERE id = ?";
+                pstmt  = connection.prepareStatement(sqlf);
+                pstmt.setString(1, select);
+                pstmt.executeUpdate();
+            }
+                
+            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+            pstmt  = connection.prepareStatement(sql);
+            pstmt.setString(1, select);
+            resultSet = pstmt.executeQuery();
+            table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void fetchLockersOnIDAndChangeLockerCode() {
+        try {
+            String select = idSelect.getSelectedItem().toString();
+            
+            databaseConnection();
+            String codeInsert = code.getText().toString();
+
+            String sqlf = "UPDATE lockers SET locker_code = ?  WHERE id = ?";
+            pstmt  = connection.prepareStatement(sqlf);
+            pstmt.setString(1, codeInsert);
+            pstmt.setString(2, select);
+            pstmt.executeUpdate();
+                
+            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+            pstmt  = connection.prepareStatement(sql);
+            pstmt.setString(1, select);
+            resultSet = pstmt.executeQuery();
+            table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void fetchLockersOnIDAndRestLockerCode() {
+        try {
+            String select = idSelect.getSelectedItem().toString();
+            
+            databaseConnection();
+            
+            String sqlf = "UPDATE lockers SET locker_code = null  WHERE id = ?";
+            pstmt  = connection.prepareStatement(sqlf);
+            pstmt.setString(1, select);
+            pstmt.executeUpdate();
+                
+            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+            pstmt  = connection.prepareStatement(sql);
+            pstmt.setString(1, select);
+            resultSet = pstmt.executeQuery();
+            table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

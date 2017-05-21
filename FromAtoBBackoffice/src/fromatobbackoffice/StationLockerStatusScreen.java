@@ -163,7 +163,7 @@ public class StationLockerStatusScreen extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void stationSelectActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        fetch();
+        fetchStationLockersOnName();
     }                                             
 
     private void lockerChangeActionPerformed(java.awt.event.ActionEvent evt) {                                             
@@ -176,7 +176,7 @@ public class StationLockerStatusScreen extends javax.swing.JFrame {
         dispose();
     }                                                 
 
-    private void fetch() {
+    private void fetchStationLockersOnName() {
         try {
         databaseConnection();
             String select = stationSelect.getSelectedItem().toString();
