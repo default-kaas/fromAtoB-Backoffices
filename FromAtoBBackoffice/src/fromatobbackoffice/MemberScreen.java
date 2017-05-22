@@ -56,7 +56,7 @@ public class MemberScreen extends javax.swing.JFrame {
     public void fetch() {
         try {
             stmt = conn.createStatement();
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users";
+                String sql = "SELECT id, email, firstname, lastname, points, total_points, iban, phonenumber, city, zip_code, housenumber FROM users";
             rs = stmt.executeQuery(sql);
             //create table
             jTable1.setModel(DbUtils.resultSetToTableModel(rs));
@@ -74,7 +74,7 @@ public class MemberScreen extends javax.swing.JFrame {
             try {
                 try {
                     int id = Integer.parseInt(jTFID.getText());
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE userID = ?";
+                String sql = "SELECT id, email, firstname, lastname, points, total_points, iban, phonenumber, city, zip_code, housenumber FROM users WHERE id = ?";
                     pstmt = conn.prepareStatement(sql);
                     pstmt.setInt(1, id);
                     rs = pstmt.executeQuery();
@@ -99,7 +99,7 @@ public class MemberScreen extends javax.swing.JFrame {
         } else {
             try {
                 String email = jTFEmail.getText();
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE e-mail = ?";
+                String sql = "SELECT id, email, firstname, lastname, points, total_points, iban, phonenumber, city, zip_code, housenumber FROM users WHERE email = ?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, email);
                 rs = pstmt.executeQuery();
@@ -120,7 +120,7 @@ public class MemberScreen extends javax.swing.JFrame {
         } else {
             try {
                 String stad = jTFStad.getText();
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE city = ?";
+                String sql = "SELECT id, email, firstname, lastname, points, total_points, iban, phonenumber, city, zip_code, housenumber FROM users WHERE city = ?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, stad);
                 rs = pstmt.executeQuery();
@@ -141,7 +141,7 @@ public class MemberScreen extends javax.swing.JFrame {
         } else {
             try {
                 String voornaam = "%" + jTFvoornaam.getText() + "%";
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE first_name LIKE ?";
+                String sql = "SELECT id, email, firstname, lastname, points, total_points, iban, phonenumber, city, zip_code, housenumber FROM users WHERE firstname LIKE ?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, voornaam);
                 rs = pstmt.executeQuery();
@@ -162,7 +162,7 @@ public class MemberScreen extends javax.swing.JFrame {
         } else {
             try {
                 String achternaam = "%" + jTFachternaam.getText() + "%";
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users WHERE last_name LIKE ?";
+                String sql = "SELECT id, email, firstname, lastname, points, total_points, iban, phonenumber, city, zip_code, housenumber FROM users WHERE lastname LIKE ?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, achternaam);
                 rs = pstmt.executeQuery();
@@ -180,7 +180,7 @@ public class MemberScreen extends javax.swing.JFrame {
     public void orderByPoints() {
         if (hoogNaarLaag) {
             try {
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users ORDER BY points DESC";
+                String sql = "SELECT id, email, firstname, lastname, total_points, points FROM users ORDER BY total_points DESC";
                 pstmt = conn.prepareStatement(sql);
                 rs = pstmt.executeQuery();
                 hoogNaarLaag = false;
@@ -191,7 +191,7 @@ public class MemberScreen extends javax.swing.JFrame {
             }
         } else {
             try {
-                String sql = "SELECT userID, e-mail, first_name, last_name, points, iban, phone number, city, postal_code, house_number FROM users ORDER BY points ASC";
+                String sql = "SELECT id, email, firstname, lastname, total_points, points FROM users ORDER BY total_points ASC";
                 pstmt = conn.prepareStatement(sql);
                 rs = pstmt.executeQuery();
                 hoogNaarLaag = true;
@@ -209,7 +209,7 @@ public class MemberScreen extends javax.swing.JFrame {
         if (hoogNaarLaag) {
             try {
                 stmt = conn.createStatement();
-                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Verstuurde pakketten', points FROM users JOIN packages ON userID = customerID GROUP BY userID ORDER BY COUNT(*) DESC";
+                String sql = "SELECT DISTINCT u.id, email, firstname, lastname, COUNT(*) 'Verstuurde pakketten', points, total_points FROM users u JOIN packages p ON u.id = owner_id GROUP BY u.id ORDER BY COUNT(*) DESC";
                 rs = stmt.executeQuery(sql);
                 hoogNaarLaag = false;
                 //create table ordered by sent packages from most to least
@@ -221,7 +221,7 @@ public class MemberScreen extends javax.swing.JFrame {
         } else {
             try {
                 stmt = conn.createStatement();
-                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Verstuurde pakketten', points FROM users JOIN packages ON userID = customerID GROUP BY userID ORDER BY COUNT(*)";
+                String sql = "SELECT DISTINCT u.id, email, firstname, lastname, COUNT(*) 'Verstuurde pakketten', points, total_points FROM users u JOIN packages p ON u.id = owner_id GROUP BY u.id ORDER BY COUNT(*)";
                 rs = stmt.executeQuery(sql);
                 hoogNaarLaag = true;
                 //create table ordered by sent packages from least to most
@@ -238,7 +238,7 @@ public class MemberScreen extends javax.swing.JFrame {
         if (hoogNaarLaag) {
             try {
                 stmt = conn.createStatement();
-                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Bezorgde pakketten', points FROM users JOIN partial routes ON userID = courierID GROUP BY userID ORDER BY COUNT(*) DESC";
+                String sql = "SELECT DISTINCT u.id, email, firstname, lastname, COUNT(*) 'Bezorgde pakketten', points, total_points FROM users u JOIN package_courses p ON u.id = courier_id GROUP BY u.id ORDER BY COUNT(*) DESC";
                 rs = stmt.executeQuery(sql);
                 hoogNaarLaag = false;
                 //create table ordered by delivered packages from most to least
@@ -251,7 +251,7 @@ public class MemberScreen extends javax.swing.JFrame {
         } else {
             try {
                 stmt = conn.createStatement();
-                String sql = "SELECT DISTINCT userID, e-mail, first_name, last_name, COUNT(*) 'Bezorgde pakketten', points FROM users JOIN partial routes ON userID = courierID GROUP BY userID ORDER BY COUNT(*)";
+                String sql = "SELECT DISTINCT u.id, email, firstname, lastname, COUNT(*) 'Bezorgde pakketten', points, total_points FROM users u JOIN package_courses p ON u.id = courier_id GROUP BY u.id ORDER BY COUNT(*)";
                 rs = stmt.executeQuery(sql);
                 hoogNaarLaag = true;
                 //create table ordered by delivered packages from least to most
@@ -349,6 +349,11 @@ public class MemberScreen extends javax.swing.JFrame {
         jLID.setText("ID");
 
         jTFID.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTFID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFIDActionPerformed(evt);
+            }
+        });
 
         jBID.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBID.setText("Zoeken");
@@ -362,6 +367,11 @@ public class MemberScreen extends javax.swing.JFrame {
         jLEmail.setText("E-mail");
 
         jTFEmail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTFEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFEmailActionPerformed(evt);
+            }
+        });
 
         jBEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBEmail.setText("Zoeken");
@@ -375,6 +385,11 @@ public class MemberScreen extends javax.swing.JFrame {
         jLStad.setText("Woonplaats");
 
         jTFStad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTFStad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFStadActionPerformed(evt);
+            }
+        });
 
         jBStad.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBStad.setText("Zoeken");
@@ -437,8 +452,18 @@ public class MemberScreen extends javax.swing.JFrame {
         jLachternaam.setText("Achternaam");
 
         jTFvoornaam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTFvoornaam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFvoornaamActionPerformed(evt);
+            }
+        });
 
         jTFachternaam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTFachternaam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFachternaamActionPerformed(evt);
+            }
+        });
 
         jBvoornaam.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jBvoornaam.setText("Zoeken");
@@ -652,6 +677,26 @@ public class MemberScreen extends javax.swing.JFrame {
     private void jBachternaamActionPerformed(java.awt.event.ActionEvent evt) {                                             
         fetchLastname();
     }                                            
+
+    private void jTFIDActionPerformed(java.awt.event.ActionEvent evt) {                                      
+        fetchID();
+    }                                     
+
+    private void jTFEmailActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        fetchEmail();
+    }                                        
+
+    private void jTFStadActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        fetchStad();
+    }                                       
+
+    private void jTFvoornaamActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        fetchFirstname();
+    }                                           
+
+    private void jTFachternaamActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        fetchLastname();
+    }                                             
 
     /**
      * @param args the command line arguments
