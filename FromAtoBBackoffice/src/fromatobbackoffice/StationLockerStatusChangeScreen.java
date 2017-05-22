@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.proteanit.sql.DbUtils;
 
 public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
@@ -243,36 +245,48 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     }                                        
 
     private void fetchStationLockersOnName() {
-        try {
-            databaseConnection();
-                String select = stationSelect.getSelectedItem().toString();
+        Pattern p = Pattern.compile("^[a-zA-Z\\u0080-\\u024F\\s\\/\\-\\)\\(\\`\\.\\\"\\']+$");
+        Matcher m = p.matcher(stationSelect.getSelectedItem().toString());
+        boolean b = m.matches();
+        if(b == false){
+            JOptionPane.showMessageDialog(null, "Je mag alleen tekens gebruiken die in steden namen staan.");
+        }else{
+            try {
+                databaseConnection();
+                    String select = stationSelect.getSelectedItem().toString();
 
-                String sql = "SELECT l.id, s.name, locker_number, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE name = ?"; 
+                    String sql = "SELECT l.id, s.name, locker_number, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE name = ?"; 
+                    pstmt  = connection.prepareStatement(sql);
+                    pstmt.setString(1, select);
+                    resultSet = pstmt.executeQuery();
+                    table.setModel(DbUtils.resultSetToTableModel(resultSet));
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+        }  
+    }
+    
+    private void fetchLockersOnID() {
+        Pattern pi = Pattern.compile("^[0-9]+$");
+        Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
+        boolean bi = mi.matches();
+        if(bi == false){
+            JOptionPane.showMessageDialog(null, "Een kluis id bestaat alleen uit cijfers");
+        }else{
+        
+            try {
+            databaseConnection();
+                String select = idSelect.getSelectedItem().toString();
+
+                String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
                 pstmt  = connection.prepareStatement(sql);
                 pstmt.setString(1, select);
                 resultSet = pstmt.executeQuery();
                 table.setModel(DbUtils.resultSetToTableModel(resultSet));
+       
             } catch (Exception e) {
-                System.out.println(e);
                 JOptionPane.showMessageDialog(null, e);
             }
-        
-    }
-    
-    private void fetchLockersOnID() {
-        try {
-        databaseConnection();
-            String select = idSelect.getSelectedItem().toString();
-
-            String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
-            pstmt  = connection.prepareStatement(sql);
-            pstmt.setString(1, select);
-            resultSet = pstmt.executeQuery();
-            table.setModel(DbUtils.resultSetToTableModel(resultSet));
-       
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, e);
         }
     }
     
@@ -308,27 +322,41 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     }
     
     private void fetchLockersOnIDAndChangeLockerCode() {
-        try {
-            String select = idSelect.getSelectedItem().toString();
+        Pattern pi = Pattern.compile("^$");
+        Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
+        boolean bi = mi.matches();
+        if(bi == true){
+            JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
+        }else{
+            Pattern pc = Pattern.compile("^[0-9]{6}$");
+            Matcher mc = pc.matcher(code.getText().toString());
+            boolean bc = mc.matches();
+            if(bc == false){
+                JOptionPane.showMessageDialog(null, "Een code bestaat alleen uit 6 cijfers.");
+            }else{
+                try {
+                    String select = idSelect.getSelectedItem().toString();
             
-            databaseConnection();
-            String codeInsert = code.getText().toString();
+                    databaseConnection();
+                    String codeInsert = code.getText().toString();
 
-            String sqlf = "UPDATE lockers SET locker_code = ?  WHERE id = ?";
-            pstmt  = connection.prepareStatement(sqlf);
-            pstmt.setString(1, codeInsert);
-            pstmt.setString(2, select);
-            pstmt.executeUpdate();
+                    String sqlf = "UPDATE lockers SET locker_code = ?  WHERE id = ?";
+                    pstmt  = connection.prepareStatement(sqlf);
+                    pstmt.setString(1, codeInsert);
+                    pstmt.setString(2, select);
+                    pstmt.executeUpdate();
                 
-            String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
-            pstmt  = connection.prepareStatement(sql);
-            pstmt.setString(1, select);
-            resultSet = pstmt.executeQuery();
-            table.setModel(DbUtils.resultSetToTableModel(resultSet));
+                    String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+                    pstmt  = connection.prepareStatement(sql);
+                    pstmt.setString(1, select);
+                    resultSet = pstmt.executeQuery();
+                    table.setModel(DbUtils.resultSetToTableModel(resultSet));
             
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, e);
+                } catch (Exception e) {
+                    System.out.println(e);
+                 JOptionPane.showMessageDialog(null, e);
+                }
+            }
         }
     }
     
