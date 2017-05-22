@@ -293,7 +293,6 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     private void fetchLockersOnIDAndChangeOccupied() {
         try {
             String select = idSelect.getSelectedItem().toString();
-            
             databaseConnection();
             String selectStatus = statusSelect.getSelectedItem().toString();
                 
@@ -316,12 +315,12 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             table.setModel(DbUtils.resultSetToTableModel(resultSet));
             
         } catch (Exception e) {
-            System.out.println(e);
             JOptionPane.showMessageDialog(null, e);
         }
     }
     
     private void fetchLockersOnIDAndChangeLockerCode() {
+    // Hier nog even naar kijken wat het probleem is
         Pattern pi = Pattern.compile("^$");
         Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
         boolean bi = mi.matches();
@@ -353,7 +352,6 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                     table.setModel(DbUtils.resultSetToTableModel(resultSet));
             
                 } catch (Exception e) {
-                    System.out.println(e);
                  JOptionPane.showMessageDialog(null, e);
                 }
             }
@@ -378,7 +376,6 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             table.setModel(DbUtils.resultSetToTableModel(resultSet));
             
         } catch (Exception e) {
-            System.out.println(e);
             JOptionPane.showMessageDialog(null, e);
         }
     }
