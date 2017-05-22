@@ -140,14 +140,14 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null}
+                {null, null, null, null}
             },
             new String [] {
-                "id", "name", "locker_id", "locker_code", "occupied"
+                "id", "name", "locker_number", "occupied"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -244,19 +244,19 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
 
     private void fetchStationLockersOnName() {
         try {
-        databaseConnection();
-            String select = stationSelect.getSelectedItem().toString();
+            databaseConnection();
+                String select = stationSelect.getSelectedItem().toString();
 
-            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE name = ?"; 
-            pstmt  = connection.prepareStatement(sql);
-            pstmt.setString(1, select);
-            resultSet = pstmt.executeQuery();
-            table.setModel(DbUtils.resultSetToTableModel(resultSet));
-       
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, e);
-        }
+                String sql = "SELECT l.id, s.name, locker_number, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE name = ?"; 
+                pstmt  = connection.prepareStatement(sql);
+                pstmt.setString(1, select);
+                resultSet = pstmt.executeQuery();
+                table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, e);
+            }
+        
     }
     
     private void fetchLockersOnID() {
@@ -264,7 +264,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         databaseConnection();
             String select = idSelect.getSelectedItem().toString();
 
-            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+            String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
             pstmt  = connection.prepareStatement(sql);
             pstmt.setString(1, select);
             resultSet = pstmt.executeQuery();
@@ -320,7 +320,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             pstmt.setString(2, select);
             pstmt.executeUpdate();
                 
-            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+            String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
             pstmt  = connection.prepareStatement(sql);
             pstmt.setString(1, select);
             resultSet = pstmt.executeQuery();
@@ -343,7 +343,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             pstmt.setString(1, select);
             pstmt.executeUpdate();
                 
-            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+            String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
             pstmt  = connection.prepareStatement(sql);
             pstmt.setString(1, select);
             resultSet = pstmt.executeQuery();
