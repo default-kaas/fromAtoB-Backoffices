@@ -81,6 +81,7 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inloggen Backoffice");
         setBackground(new java.awt.Color(255, 153, 0));
+        setPreferredSize(new java.awt.Dimension(2000, 2000));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 10));
@@ -185,7 +186,53 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void passwordTActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
+ try {
+            if ("".equals(usernameT.getText()) || "".equals(passwordT.getText())) {
+                JOptionPane.showMessageDialog(null, "U heeft niet alle velden ingevuld");
+            } else {
+                String user = usernameT.getText().trim();
+                String pass = passwordT.getText().trim();
+
+                String sql = "SELECT * FROM administrator WHERE username = ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, user);
+                ResultSet rs = pstmt.executeQuery();
+
+                int count = 0;
+                String hashedPassword = null;
+                while (rs.next()) {
+                    count++;
+                    hashedPassword = rs.getString("password");
+                }
+
+                if (count == 1) {
+                    if (hashedPassword.equals(hashPassword(pass))) {
+                        rs.close();
+                        pstmt.close();
+                        conn.close();
+                        StartScreen s = new StartScreen();
+                        s.setVisible(true);
+                        dispose();
+                    } else {
+                        System.out.println(hashedPassword);
+                        System.out.println(hashPassword(pass));
+                        JOptionPane.showMessageDialog(null, "Inloggegevens verkeerd");
+                    }
+                } else if (count == 0) {
+                    System.out.println(usernameT.getText());
+                    System.out.println(passwordT.getText());
+                    JOptionPane.showMessageDialog(null, "Inloggegevens verkeerd");
+                }
+
+            }
+
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception ex) {
+            //Handle errors for Class.forName
+            ex.printStackTrace();
+        }
     }                                         
 
     private void usernameTActionPerformed(java.awt.event.ActionEvent evt) {                                          
@@ -224,8 +271,6 @@ public class Login extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Inloggegevens verkeerd");
                     }
                 } else if (count == 0) {
-                    System.out.println(usernameT.getText());
-                    System.out.println(passwordT.getText());
                     JOptionPane.showMessageDialog(null, "Inloggegevens verkeerd");
                 }
 
