@@ -307,7 +307,16 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         }
     }
     
-    
+        public static String hashCode(String code) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA");
+        md.update(code.getBytes());
+        byte[] b = md.digest();
+        StringBuffer sb = new StringBuffer();
+        for (byte b1 : b) {
+            sb.append(Integer.toHexString(b1 & 0xff));
+        }
+        return sb.toString();
+    }
     
     private void fetchLockersOnIDAndChangeLockerCode() {
         if ("".equals(idSelect.getText())){

@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -161,26 +162,59 @@ public class PackageStatusScreen extends javax.swing.JFrame {
 
     public void fillTable(String input) {
         connect();
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        jTable2.setModel(model);
         try {
             ResultSet rs;
+            ResultSet rs2;
+
             if (input != null && !input.isEmpty()) {
+                try {
+                    Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    System.out.println("Vul alsjeblieft een nummer in");
+                    fillTable(null);
+                    return;
+                }
                 String sql = "SELECT id, owner_id,  start_station, end_station, status FROM packages WHERE id = ? OR owner_id = ? OR start_station = ? OR end_station = ? OR status = ?";
+                //SQL query, er wordt gezocht binnen elk mogelijke attribuut of deze (deels) overeenkomst met de zoekterm
                 PreparedStatement pstmt = conn.prepareStatement(sql);
+                PreparedStatement pstmt2 = conn.prepareStatement(sql);
+                //Prepared statements tegen SQL injecties
                 int newInt = Integer.parseInt(input);
                 pstmt.setInt(1, newInt);
                 pstmt.setInt(2, newInt);
                 pstmt.setInt(3, newInt);
                 pstmt.setInt(4, newInt);
                 pstmt.setInt(5, newInt);
+                pstmt2.setInt(1, newInt);
+                pstmt2.setInt(2, newInt);
+                pstmt2.setInt(3, newInt);
+                pstmt2.setInt(4, newInt);
+                pstmt2.setInt(5, newInt);
                 rs = pstmt.executeQuery();
+                rs2 = pstmt2.executeQuery();
             } else {
                 Statement stmt = conn.createStatement();
+                Statement stmt2 = conn.createStatement();
+                //Normaal statement: hier is niks ingevuld, dus hoeft er geen Prepared statement gebruikt te worden, omdat er geen risico is op SQL injecties
                 rs = stmt.executeQuery("SELECT id, owner_id,  start_station, end_station, status FROM packages");
+                rs2 = stmt2.executeQuery("SELECT id, owner_id,  start_station, end_station, status FROM packages");
             }
             int row = 0;
+            model = (DefaultTableModel) jTable2.getModel();
+
+            int rowCount = 0;
+            while (rs2.next()) {
+                rowCount++;
+            }
+            model.setRowCount(rowCount);
+            jTable2.setModel(model);
+
             while (rs.next()) {
                 int id = rs.getInt("id"); 	         // 1e kolom
-                int owner_id = rs.getInt("owner_id");  // kolom ‘Naam’
+                int owner_id = rs.getInt("owner_id");  // 2e kolom
                 String start_station = rs.getString("start_station"); 	   // 3e kolom
                 String end_station = rs.getString("end_station"); // 4e kolom
                 String status = rs.getString("status"); // 5e kolom
@@ -195,6 +229,7 @@ public class PackageStatusScreen extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             Logger.getLogger(PackageStatusScreen.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Something went wrong with executing the query");
         }
     }
 
