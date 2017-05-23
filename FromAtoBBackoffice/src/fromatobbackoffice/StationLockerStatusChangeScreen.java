@@ -80,14 +80,14 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        titel.setFont(new java.awt.Font("Tahoma", 1, 48)); 
+        titel.setFont(new Font("Tahoma", 1, 48)); 
         titel.setText("Stationskluis status wijzigingsscherm");
 
-        stationLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        stationLabel.setFont(new Font("Tahoma", 1, 12)); 
         stationLabel.setText("Station selecteren:");
 
         stationSelect.setEditable(false);
-        stationSelect.setFont(new java.awt.Font("Tahoma", 0, 12)); 
+        stationSelect.setFont(new Font("Tahoma", 0, 12)); 
         stationSelect.setModel(new StationComboBoxModel(conn.getStationNames()));
         stationSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,7 +95,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        idLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        idLabel.setFont(new Font("Tahoma", 1, 12)); 
         idLabel.setText("KluisID selecteren:");
 
         //idSelect.setEditable(false);
@@ -106,17 +106,17 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        codeLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        codeLabel.setFont(new Font("Tahoma", 1, 12)); 
         codeLabel.setText("Kluiscode instellen:");
 
-        code.setFont(new java.awt.Font("Tahoma", 0, 12)); 
+        code.setFont(new Font("Tahoma", 0, 12)); 
         code.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 codeActionPerformed(evt);
             }
         });
 
-        codeRestButton.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        codeRestButton.setFont(new Font("Tahoma", 1, 12)); 
         codeRestButton.setText("Rest kluiscode");
         codeRestButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,7 +124,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        statusLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        statusLabel.setFont(new Font("Tahoma", 1, 12)); 
         statusLabel.setText("Kluisstatus instellen:");
 
         statusSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "true", "false" }));
@@ -134,7 +134,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        backToStartScreenAction.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        backToStartScreenAction.setFont(new Font("Tahoma", 1, 12)); 
         backToStartScreenAction.setText("Terug naar startscherm");
         backToStartScreenAction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
