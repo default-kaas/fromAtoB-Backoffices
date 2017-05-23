@@ -165,7 +165,9 @@ public class PackageStatusScreen extends javax.swing.JFrame {
             ResultSet rs;
             if (input != null && !input.isEmpty()) {
                 String sql = "SELECT id, owner_id,  start_station, end_station, status FROM packages WHERE id = ? OR owner_id = ? OR start_station = ? OR end_station = ? OR status = ?";
+                //SQL query, er wordt gezocht binnen elk mogelijke attribuut of deze (deels) overeenkomst met de zoekterm
                 PreparedStatement pstmt = conn.prepareStatement(sql);
+                //Prepared statements tegen SQL injecties
                 int newInt = Integer.parseInt(input);
                 pstmt.setInt(1, newInt);
                 pstmt.setInt(2, newInt);
@@ -175,6 +177,7 @@ public class PackageStatusScreen extends javax.swing.JFrame {
                 rs = pstmt.executeQuery();
             } else {
                 Statement stmt = conn.createStatement();
+                //Normaal statement: hier is niks ingevuld, dus hoeft er geen Prepared statement gebruikt te worden, omdat er geen risico is op SQL injecties
                 rs = stmt.executeQuery("SELECT id, owner_id,  start_station, end_station, status FROM packages");
             }
             int row = 0;
