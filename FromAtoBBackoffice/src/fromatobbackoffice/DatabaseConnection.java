@@ -10,7 +10,7 @@ public class DatabaseConnection {
     private ResultSet resultSet;
     private PreparedStatement pstmt;
     private Station station;
-    private Locker locker;
+    
     
     private static final String USERNAME = "wnk012";
     private static final String PASSWORD = "wnk012";
@@ -59,34 +59,5 @@ public class DatabaseConnection {
             return null;
         } 
     }
-    
-    public ArrayList getLockerID(){
-    try{
-        databaseConnection();
-        
-        String sql = "SELECT id FROM lockers";
-        pstmt = connection.prepareStatement(sql);
-        resultSet = pstmt.executeQuery();
-        
-        ArrayList<Locker> lockerIds = new ArrayList<>();
-        
-        while (resultSet.next()) {
-            Locker l = new Locker();
-            int sl = resultSet.getInt("id");
-            l.setId(sl);
-            lockerIds.add(l);
-        }
-        
-        return lockerIds;
-    } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-            return null;
-        } catch (Exception ex) {
-            //Handle errors for Class.forName
-            ex.printStackTrace();
-            return null;
-        } 
-    }
-       
+           
 }

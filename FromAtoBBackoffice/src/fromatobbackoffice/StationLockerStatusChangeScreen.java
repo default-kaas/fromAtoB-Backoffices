@@ -117,7 +117,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         });
 
         codeRestButton.setFont(new Font("Tahoma", 1, 12)); 
-        codeRestButton.setText("Rest kluiscode");
+        codeRestButton.setText("Reste kluiscode");
         codeRestButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 codeRestButtonActionPerformed(evt);
