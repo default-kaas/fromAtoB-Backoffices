@@ -20,7 +20,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     private JLabel codeLabel;
     private JButton codeRestButton;
     private JLabel idLabel;
-    private JComboBox<Locker> idSelect;
+    private JTextField idSelect;
     private JButton backToStartScreenAction;
     private JScrollPane scroll;
     private JLabel stationLabel;
@@ -66,7 +66,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         stationLabel = new JLabel();
         stationSelect = new JComboBox<>();
         idLabel = new JLabel();
-        idSelect = new JComboBox<>();
+        idSelect = new JTextField();
         codeLabel = new JLabel();
         code = new JTextField();
         codeRestButton = new JButton();
@@ -80,14 +80,14 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        titel.setFont(new java.awt.Font("Tahoma", 1, 48)); 
+        titel.setFont(new Font("Tahoma", 1, 48)); 
         titel.setText("Stationskluis status wijzigingsscherm");
 
-        stationLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        stationLabel.setFont(new Font("Tahoma", 1, 12)); 
         stationLabel.setText("Station selecteren:");
 
-        stationSelect.setEditable(true);
-        stationSelect.setFont(new java.awt.Font("Tahoma", 0, 12)); 
+        stationSelect.setEditable(false);
+        stationSelect.setFont(new Font("Tahoma", 0, 12)); 
         stationSelect.setModel(new StationComboBoxModel(conn.getStationNames()));
         stationSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,28 +95,28 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        idLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        idLabel.setFont(new Font("Tahoma", 1, 12)); 
         idLabel.setText("KluisID selecteren:");
 
-        idSelect.setEditable(true);
-        idSelect.setModel(new LockerComboBoxModel(conn.getLockerID()));
+        //idSelect.setEditable(false);
+        //idSelect.setModel(new LockerComboBoxModel(conn.getLockerID()));
         idSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 idSelectActionPerformed(evt);
             }
         });
 
-        codeLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        codeLabel.setFont(new Font("Tahoma", 1, 12)); 
         codeLabel.setText("Kluiscode instellen:");
 
-        code.setFont(new java.awt.Font("Tahoma", 0, 12)); 
+        code.setFont(new Font("Tahoma", 0, 12)); 
         code.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 codeActionPerformed(evt);
             }
         });
 
-        codeRestButton.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        codeRestButton.setFont(new Font("Tahoma", 1, 12)); 
         codeRestButton.setText("Rest kluiscode");
         codeRestButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,7 +124,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        statusLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        statusLabel.setFont(new Font("Tahoma", 1, 12)); 
         statusLabel.setText("Kluisstatus instellen:");
 
         statusSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "true", "false" }));
@@ -134,7 +134,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             }
         });
 
-        backToStartScreenAction.setFont(new java.awt.Font("Tahoma", 1, 12)); 
+        backToStartScreenAction.setFont(new Font("Tahoma", 1, 12)); 
         backToStartScreenAction.setText("Terug naar startscherm");
         backToStartScreenAction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -246,63 +246,43 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         dispose();
     }                                        
 
-    private void fetchStationLockersOnName() {
-        Pattern p = Pattern.compile("^[a-zA-Z\\u0080-\\u024F\\s\\/\\-\\)\\(\\`\\.\\\"\\']+$");
-        Matcher m = p.matcher(stationSelect.getSelectedItem().toString());
-        boolean b = m.matches();
-        if(b == false){
-            System.out.println(b);
-            JOptionPane.showMessageDialog(null, "Je mag alleen tekens gebruiken die in steden namen staan.");
-        }else{
-            try {
-                databaseConnection();
-                    String select = stationSelect.getSelectedItem().toString();
+    private void fetchStationLockersOnName() {       
+        try {
+        databaseConnection();
+        String select = stationSelect.getSelectedItem().toString();
 
-                    String sql = "SELECT l.id, s.name, locker_number, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE name = ?"; 
-                    pstmt  = connection.prepareStatement(sql);
-                    pstmt.setString(1, select);
-                    resultSet = pstmt.executeQuery();
-                    table.setModel(DbUtils.resultSetToTableModel(resultSet));
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e);
-                }
-        }  
+        String sql = "SELECT l.id, s.name, locker_number, occupied FROM lockers l JOIN stations s ON l.station_id = s.id WHERE name = ?"; 
+        pstmt  = connection.prepareStatement(sql);
+        pstmt.setString(1, select);
+        resultSet = pstmt.executeQuery();
+        table.setModel(DbUtils.resultSetToTableModel(resultSet));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }      
     }
     
     private void fetchLockersOnID() {
-        Pattern pi = Pattern.compile("^[0-9]+$");
-        Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
-        boolean bi = mi.matches();
-        if(bi == false){
-            JOptionPane.showMessageDialog(null, "Een kluis id bestaat alleen uit cijfers");
-        }else{
-        
-            try {
-            databaseConnection();
-                String select = idSelect.getSelectedItem().toString();
+        try {
+        databaseConnection();
+        String select = idSelect.getText().toString();
 
-                String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
-                pstmt  = connection.prepareStatement(sql);
-                pstmt.setString(1, select);
-                resultSet = pstmt.executeQuery();
-                table.setModel(DbUtils.resultSetToTableModel(resultSet));
+        String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+        pstmt  = connection.prepareStatement(sql);
+        pstmt.setString(1, select);
+        resultSet = pstmt.executeQuery();
+        table.setModel(DbUtils.resultSetToTableModel(resultSet));
        
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
     }
     
     private void fetchLockersOnIDAndChangeOccupied() {
-    /*    Pattern pi = Pattern.compile("^$");
-        Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
-        boolean bi = mi.matches(); 
-        if(bi == true){*/
-        if ("".equals(idSelect.getSelectedItem())){
+        if ("".equals(idSelect.getText())){
             JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
         }else{
             try {
-                String select = idSelect.getSelectedItem().toString();
+                String select = idSelect.getText().toString();
                 databaseConnection();
                 String selectStatus = statusSelect.getSelectedItem().toString();
                     if(selectStatus == "false"){
@@ -322,7 +302,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                 resultSet = pstmt.executeQuery();
                 table.setModel(DbUtils.resultSetToTableModel(resultSet));
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+                //JOptionPane.showMessageDialog(null, e);
             }
         }
     }
@@ -339,11 +319,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     }
     
     private void fetchLockersOnIDAndChangeLockerCode() {
-    /*    Pattern pi = Pattern.compile("^$");
-        Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
-        boolean bi = mi.matches();
-        if(bi == true){ */
-        if ("".equals(idSelect.getSelectedItem())){
+        if ("".equals(idSelect.getText())){
             JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
         }else{
             Pattern pc = Pattern.compile("^[0-9]{6}$");
@@ -353,7 +329,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Een code bestaat alleen uit 6 cijfers.");
             }else{
                 try {
-                    String select = idSelect.getSelectedItem().toString();
+                    String select = idSelect.getText().toString();
             
                     databaseConnection();
                     String codeInsert = code.getText().toString();
@@ -370,34 +346,39 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                     pstmt.setString(1, select);
                     resultSet = pstmt.executeQuery();
                     table.setModel(DbUtils.resultSetToTableModel(resultSet));
-            
+                    JOptionPane.showMessageDialog(null, "De code is succevol toegepast.");
                 } catch (Exception e) {
-                 JOptionPane.showMessageDialog(null, e);
-                 System.out.println(e);
+                // JOptionPane.showMessageDialog(null, e);
+                // System.out.println(e);
                 }
             }
         }
     }
     
     private void fetchLockersOnIDAndRestLockerCode() {
-        try {
-            String select = idSelect.getSelectedItem().toString();
+        if ("".equals(idSelect.getText())){
+            JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
+        }else{
+            try {
+                String select = idSelect.getText().toString();
             
-            databaseConnection();
+                databaseConnection();
             
-            String sqlf = "UPDATE lockers SET locker_code = null  WHERE id = ?";
-            pstmt  = connection.prepareStatement(sqlf);
-            pstmt.setString(1, select);
-            pstmt.executeUpdate();
+                String sqlf = "UPDATE lockers SET locker_code = null  WHERE id = ?";
+                pstmt  = connection.prepareStatement(sqlf);
+                pstmt.setString(1, select);
+                pstmt.executeUpdate();
                 
-            String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
-            pstmt  = connection.prepareStatement(sql);
-            pstmt.setString(1, select);
-            resultSet = pstmt.executeQuery();
-            table.setModel(DbUtils.resultSetToTableModel(resultSet));
+                String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+                pstmt  = connection.prepareStatement(sql);
+                pstmt.setString(1, select);
+                resultSet = pstmt.executeQuery();
+                table.setModel(DbUtils.resultSetToTableModel(resultSet));
             
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, "De code is succevol gerested");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
         }
     }
     
