@@ -291,31 +291,35 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     }
     
     private void fetchLockersOnIDAndChangeOccupied() {
-        try {
-            String select = idSelect.getSelectedItem().toString();
-            databaseConnection();
-            String selectStatus = statusSelect.getSelectedItem().toString();
-                
-            if(selectStatus == "false"){
-                String sqlf = "UPDATE lockers SET occupied = 0  WHERE id = ?";
-                pstmt  = connection.prepareStatement(sqlf);
+        Pattern pi = Pattern.compile("^$");
+        Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
+        boolean bi = mi.matches();
+        if(bi == true){
+            JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
+        }else{
+            try {
+                String select = idSelect.getSelectedItem().toString();
+                databaseConnection();
+                String selectStatus = statusSelect.getSelectedItem().toString();
+                    if(selectStatus == "false"){
+                        String sqlf = "UPDATE lockers SET occupied = 0  WHERE id = ?";
+                        pstmt  = connection.prepareStatement(sqlf);
+                        pstmt.setString(1, select);
+                        pstmt.executeUpdate();
+                    }else{
+                        String sqlf = "UPDATE lockers SET occupied = 1  WHERE id = ?";
+                        pstmt  = connection.prepareStatement(sqlf);
+                        pstmt.setString(1, select);
+                        pstmt.executeUpdate();
+                    }   
+                String sql = "SELECT l.id, s.name, locker_number, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
+                pstmt  = connection.prepareStatement(sql);
                 pstmt.setString(1, select);
-                pstmt.executeUpdate();
-            }else{
-                String sqlf = "UPDATE lockers SET occupied = 1  WHERE id = ?";
-                pstmt  = connection.prepareStatement(sqlf);
-                pstmt.setString(1, select);
-                pstmt.executeUpdate();
+                resultSet = pstmt.executeQuery();
+                table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
             }
-                
-            String sql = "SELECT l.id, s.name, locker_number, locker_code, occupied FROM stations s JOIN lockers l  ON  s.id = l.station_id WHERE l.id = ?";
-            pstmt  = connection.prepareStatement(sql);
-            pstmt.setString(1, select);
-            resultSet = pstmt.executeQuery();
-            table.setModel(DbUtils.resultSetToTableModel(resultSet));
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
         }
     }
     
