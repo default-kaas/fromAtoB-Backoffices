@@ -2,6 +2,8 @@ package fromatobbackoffice;
 
 import javax.swing.*;
 import java.awt.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -323,6 +325,17 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         }
     }
     
+        public static String hashCode(String code) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA");
+        md.update(code.getBytes());
+        byte[] b = md.digest();
+        StringBuffer sb = new StringBuffer();
+        for (byte b1 : b) {
+            sb.append(Integer.toHexString(b1 & 0xff));
+        }
+        return sb.toString();
+    }
+    
     private void fetchLockersOnIDAndChangeLockerCode() {
     // Hier nog even naar kijken wat het probleem is
         Pattern pi = Pattern.compile("^$");
@@ -341,8 +354,9 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                     String select = idSelect.getSelectedItem().toString();
             
                     databaseConnection();
-                    String codeInsert = code.getText().toString();
-
+                    String codeInsert = hashCode(code.getText().toString());
+                    System.out.println(codeInsert);
+                    
                     String sqlf = "UPDATE lockers SET locker_code = ?  WHERE id = ?";
                     pstmt  = connection.prepareStatement(sqlf);
                     pstmt.setString(1, codeInsert);
