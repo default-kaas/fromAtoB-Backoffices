@@ -81,7 +81,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         setResizable(false);
 
         titel.setFont(new java.awt.Font("Tahoma", 1, 48)); 
-        titel.setText("Station kluis status aanpas scherm");
+        titel.setText("Stationskluis status wijzigingsscherm");
 
         stationLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
         stationLabel.setText("Station selecteren:");
@@ -96,7 +96,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         });
 
         idLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
-        idLabel.setText("Kluis ID selecteren:");
+        idLabel.setText("KluisID selecteren:");
 
         idSelect.setEditable(true);
         idSelect.setModel(new LockerComboBoxModel(conn.getLockerID()));
@@ -107,7 +107,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         });
 
         codeLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
-        codeLabel.setText("Kluis code instellen:");
+        codeLabel.setText("Kluiscode instellen:");
 
         code.setFont(new java.awt.Font("Tahoma", 0, 12)); 
         code.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +117,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         });
 
         codeRestButton.setFont(new java.awt.Font("Tahoma", 1, 12)); 
-        codeRestButton.setText("Rest kluis code");
+        codeRestButton.setText("Rest kluiscode");
         codeRestButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 codeRestButtonActionPerformed(evt);
@@ -125,7 +125,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         });
 
         statusLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); 
-        statusLabel.setText("Kluis status instellen:");
+        statusLabel.setText("Kluisstatus instellen:");
 
         statusSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "true", "false" }));
         statusSelect.addActionListener(new java.awt.event.ActionListener() {
@@ -251,6 +251,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         Matcher m = p.matcher(stationSelect.getSelectedItem().toString());
         boolean b = m.matches();
         if(b == false){
+            System.out.println(b);
             JOptionPane.showMessageDialog(null, "Je mag alleen tekens gebruiken die in steden namen staan.");
         }else{
             try {
@@ -293,10 +294,11 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
     }
     
     private void fetchLockersOnIDAndChangeOccupied() {
-        Pattern pi = Pattern.compile("^$");
+    /*    Pattern pi = Pattern.compile("^$");
         Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
-        boolean bi = mi.matches();
-        if(bi == true){
+        boolean bi = mi.matches(); 
+        if(bi == true){*/
+        if ("".equals(idSelect.getSelectedItem())){
             JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
         }else{
             try {
@@ -325,23 +327,14 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         }
     }
     
-        public static String hashCode(String code) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA");
-        md.update(code.getBytes());
-        byte[] b = md.digest();
-        StringBuffer sb = new StringBuffer();
-        for (byte b1 : b) {
-            sb.append(Integer.toHexString(b1 & 0xff));
-        }
-        return sb.toString();
-    }
+    
     
     private void fetchLockersOnIDAndChangeLockerCode() {
-    // Hier nog even naar kijken wat het probleem is
-        Pattern pi = Pattern.compile("^$");
+    /*    Pattern pi = Pattern.compile("^$");
         Matcher mi = pi.matcher(idSelect.getSelectedItem().toString());
         boolean bi = mi.matches();
-        if(bi == true){
+        if(bi == true){ */
+        if ("".equals(idSelect.getSelectedItem())){
             JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
         }else{
             Pattern pc = Pattern.compile("^[0-9]{6}$");
@@ -354,7 +347,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                     String select = idSelect.getSelectedItem().toString();
             
                     databaseConnection();
-                    String codeInsert = hashCode(code.getText().toString());
+                    String codeInsert = code.getText().toString();
                     System.out.println(codeInsert);
                     
                     String sqlf = "UPDATE lockers SET locker_code = ?  WHERE id = ?";
@@ -371,6 +364,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
             
                 } catch (Exception e) {
                  JOptionPane.showMessageDialog(null, e);
+                 System.out.println(e);
                 }
             }
         }
