@@ -96,7 +96,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         });
 
         idLabel.setFont(new Font("Tahoma", 1, 12)); 
-        idLabel.setText("KluisID selecteren:");
+        idLabel.setText("KluisID invoeren:");
 
         //idSelect.setEditable(false);
         //idSelect.setModel(new LockerComboBoxModel(conn.getLockerID()));
