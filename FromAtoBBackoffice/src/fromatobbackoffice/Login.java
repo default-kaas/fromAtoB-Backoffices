@@ -26,7 +26,7 @@ public class Login extends javax.swing.JFrame {
         connect();
     }
 
-    public void connect() {
+    private void connect() {
         // JDBC driver name and database URL
         String JDBC_DRIVER = "com.mysql.jdbc.Driver";
         String DB_URL = "jdbc:mysql://jestii.nl:3306/wnk012";
@@ -50,7 +50,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     //password hash method
-    public static String hashPassword(String password) throws NoSuchAlgorithmException {
+    private static String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA");
         md.update(password.getBytes());
         byte[] b = md.digest();
