@@ -307,17 +307,6 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         }
     }
     
-        public static String hashCode(String code) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA");
-        md.update(code.getBytes());
-        byte[] b = md.digest();
-        StringBuffer sb = new StringBuffer();
-        for (byte b1 : b) {
-            sb.append(Integer.toHexString(b1 & 0xff));
-        }
-        return sb.toString();
-    }
-    
     private void fetchLockersOnIDAndChangeLockerCode() {
         if ("".equals(idSelect.getText())){
             JOptionPane.showMessageDialog(null, "Er moet een kluis id zijn ingevuld.");
@@ -380,37 +369,5 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
-    }
-    
-    public static void main(String args[]) {
-        
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StationLockerStatusChangeScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StationLockerStatusChangeScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StationLockerStatusChangeScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StationLockerStatusChangeScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new StationLockerStatusChangeScreen().setVisible(true);
-            }
-        });
-    }
-
-                         
-    
-                       
+    }                      
 }

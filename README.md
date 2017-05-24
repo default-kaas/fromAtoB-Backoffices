@@ -1,2 +1,0 @@
-# fromAtoB-Backoffices
-Java Backoffices
