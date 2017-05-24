@@ -117,7 +117,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
         });
 
         codeRestButton.setFont(new Font("Tahoma", 1, 12)); 
-        codeRestButton.setText("Reste kluiscode");
+        codeRestButton.setText("Reset kluiscode");
         codeRestButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 codeRestButtonActionPerformed(evt);
@@ -375,7 +375,7 @@ public class StationLockerStatusChangeScreen extends javax.swing.JFrame {
                 resultSet = pstmt.executeQuery();
                 table.setModel(DbUtils.resultSetToTableModel(resultSet));
             
-                JOptionPane.showMessageDialog(null, "De code is succevol gerested");
+                JOptionPane.showMessageDialog(null, "De code is succevol gereset");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
