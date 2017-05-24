@@ -42,10 +42,10 @@ public class MemberScreen extends javax.swing.JFrame {
     private javax.swing.JTextField jTFvoornaam;
     private javax.swing.JTable jTable1;
     
-    Connection conn = null;
-    Statement stmt = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+    private Connection conn = null;
+    private Statement stmt = null;
+    private PreparedStatement pstmt = null;
+    private ResultSet rs = null;
     boolean hoogNaarLaag = true; 
 
     public MemberScreen() {
