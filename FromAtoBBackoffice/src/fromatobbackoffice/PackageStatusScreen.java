@@ -177,7 +177,7 @@ public class PackageStatusScreen extends javax.swing.JFrame {
                     fillTable(null);
                     return;
                 }
-                String sql = "SELECT id, owner_id,  start_station, end_station, status FROM packages WHERE id = ? OR owner_id = ? OR start_station = ? OR end_station = ? OR status = ?";
+                String sql = "SELECT p.id, owner_id,  p.start_station, p.end_station, p.status, pc.courier_id FROM packages p LEFT JOIN package_courses pc ON p.id = pc.package_id WHERE p.id = ? OR p.owner_id = ? OR p.start_station = ? OR p.end_station = ? OR p.status = ? OR pc.courier_id = ?";
                 //SQL query, er wordt gezocht binnen elk mogelijke attribuut of deze (deels) overeenkomst met de zoekterm
                 PreparedStatement pstmt = conn.prepareStatement(sql);
                 PreparedStatement pstmt2 = conn.prepareStatement(sql);
@@ -188,11 +188,13 @@ public class PackageStatusScreen extends javax.swing.JFrame {
                 pstmt.setInt(3, newInt);
                 pstmt.setInt(4, newInt);
                 pstmt.setInt(5, newInt);
+                pstmt.setInt(6, newInt);
                 pstmt2.setInt(1, newInt);
                 pstmt2.setInt(2, newInt);
                 pstmt2.setInt(3, newInt);
                 pstmt2.setInt(4, newInt);
                 pstmt2.setInt(5, newInt);
+                pstmt2.setInt(6, newInt);
                 rs = pstmt.executeQuery();
                 rs2 = pstmt2.executeQuery();
             } else {
@@ -215,12 +217,13 @@ public class PackageStatusScreen extends javax.swing.JFrame {
             while (rs.next()) {
                 int id = rs.getInt("id"); 	         // 1e kolom
                 int owner_id = rs.getInt("owner_id");  // 2e kolom
-                String start_station = rs.getString("start_station"); 	   // 3e kolom
-                String end_station = rs.getString("end_station"); // 4e kolom
-                String status = rs.getString("status"); // 5e kolom
+                int courier_id = rs.getInt(5); // 3e kolom
+                String start_station = rs.getString("start_station"); 	   // 4e kolom
+                String end_station = rs.getString("end_station"); // 5e kolom
+                String status = rs.getString("status"); // 6e kolom
                 jTable2.getModel().setValueAt(id, row, 0);
                 jTable2.getModel().setValueAt(owner_id, row, 1);
-                jTable2.getModel().setValueAt(null, row, 2);
+                jTable2.getModel().setValueAt(courier_id, row, 2);
                 jTable2.getModel().setValueAt(start_station, row, 3);
                 jTable2.getModel().setValueAt(end_station, row, 4);
                 jTable2.getModel().setValueAt(status, row, 5);
