@@ -29,7 +29,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //method for databaseconnection
-    public void connect() {
+    private void connect() {
         // JDBC driver name and database URL
         String JDBC_DRIVER = "com.mysql.jdbc.Driver";
         String DB_URL = "jdbc:mysql://jestii.nl:3306/wnk012";
@@ -53,7 +53,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //fetch data of all members out of database
-    public void fetch() {
+    private void fetch() {
         try {
             stmt = conn.createStatement();
                 String sql = "SELECT id, email, firstname, lastname, points, total_points, iban, phonenumber, city, zip_code, housenumber FROM users";
@@ -67,7 +67,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //fetch memberdata on ID
-    public void fetchID() {
+    private void fetchID() {
         if ("".equals(jTFID.getText())) {
             JOptionPane.showMessageDialog(null, "Vul id in");
         } else {
@@ -93,7 +93,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //fetch memberdata on email
-    public void fetchEmail() {
+    private void fetchEmail() {
         if ("".equals(jTFEmail.getText())) {
             JOptionPane.showMessageDialog(null, "Vul e-mail in");
         } else {
@@ -114,7 +114,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //fetch memberdata on city
-    public void fetchStad() {
+    private void fetchStad() {
         if ("".equals(jTFStad.getText())) {
             JOptionPane.showMessageDialog(null, "Vul woonplaats in");
         } else {
@@ -135,7 +135,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //fetch memberdata on firstname
-    public void fetchFirstname() {
+    private void fetchFirstname() {
         if ("".equals(jTFvoornaam.getText())) {
             JOptionPane.showMessageDialog(null, "Vul voornaam in");
         } else {
@@ -156,7 +156,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //fetch memberdata on lastname
-    public void fetchLastname() {
+    private void fetchLastname() {
         if ("".equals(jTFachternaam.getText())) {
             JOptionPane.showMessageDialog(null, "Vul achternaam in");
         } else {
@@ -177,7 +177,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //order members by points
-    public void orderByPoints() {
+    private void orderByPoints() {
         if (hoogNaarLaag) {
             try {
                 String sql = "SELECT id, email, firstname, lastname, total_points, points FROM users ORDER BY total_points DESC";
@@ -205,7 +205,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     // order members by amount of sent packages
-    public void orderBySentPackages() {
+    private void orderBySentPackages() {
         if (hoogNaarLaag) {
             try {
                 stmt = conn.createStatement();
@@ -234,7 +234,7 @@ public class MemberScreen extends javax.swing.JFrame {
     }
 
     //order members by amount of delivered packages
-    public void orderByDeliveredPackages() {
+    private void orderByDeliveredPackages() {
         if (hoogNaarLaag) {
             try {
                 stmt = conn.createStatement();
